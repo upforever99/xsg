@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>提交成功 · 石家庄铁道大学校史馆</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', 'Segoe UI', Roboto, system-ui, sans-serif;
+      background-color: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-image: linear-gradient(135deg, #eef2f6 0%, #d9e0e8 100%);
+    }
+
+    .card {
+      max-width: 700px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 34, 68, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(0, 68, 128, 0.1);
+    }
+
+    .header {
+      background: linear-gradient(145deg, #003366 0%, #1a4d80 100%);
+      padding: 30px 28px 20px 28px;
+      color: white;
+      border-bottom: 4px solid #ffcc00;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header h1 span {
+      background: #ffcc00;
+      color: #003366;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+
+    .header-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      opacity: 0.9;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header-sub a {
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .success-section {
+      padding: 40px 30px 30px;
+      text-align: center;
+    }
+
+    .success-icon {
+      width: 100px;
+      height: 100px;
+      background: #e1f5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 25px;
+      border: 3px solid #4caf50;
+    }
+
+    .success-icon svg {
+      width: 60px;
+      height: 60px;
+      fill: #4caf50;
+    }
+
+    h2 {
+      font-size: 32px;
+      color: #003366;
+      margin-bottom: 15px;
+      font-weight: 600;
+    }
+
+    .message {
+      font-size: 18px;
+      color: #2f4858;
+      margin-bottom: 25px;
+      line-height: 1.6;
+      max-width: 450px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 官Q卡片样式 */
+    .qq-card {
+      background: #f8fafd;
+      border-radius: 20px;
+      padding: 25px 20px;
+      margin: 30px 0 20px;
+      border: 1px solid #d9e2ef;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .qq-card h3 {
+      font-size: 20px;
+      color: #003366;
+      font-weight: 600;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qq-card h3 span {
+      background: #ffcc00;
+      padding: 4px 10px;
+      border-radius: 40px;
+      font-size: 14px;
+      color: #003366;
+    }
+
+    .qq-qr {
+      width: 180px;
+      height: 180px;
+      background: white;
+      border-radius: 16px;
+      padding: 10px;
+      box-shadow: 0 6px 16px rgba(0,51,102,0.12);
+      border: 2px solid #e0e8f0;
+    }
+
+    .qq-qr img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .qq-number {
+      font-size: 22px;
+      font-weight: 700;
+      color: #003366;
+      background: white;
+      padding: 8px 20px;
+      border-radius: 60px;
+      border: 1px dashed #ffcc00;
+      margin-top: 5px;
+    }
+
+    .notice-reminder {
+      background: #f8fafd;
+      border-left: 4px solid #ffcc00;
+      padding: 16px 24px;
+      text-align: left;
+      border-radius: 12px;
+      margin: 30px 0 20px;
+      color: #1e2f3e;
+    }
+
+    .notice-reminder p {
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #003366;
+    }
+
+    .notice-reminder ul {
+      padding-left: 20px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: linear-gradient(145deg, #003366, #1e4d7a);
+      color: white;
+      text-decoration: none;
+      padding: 16px 40px;
+      border-radius: 60px;
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 15px;
+      border: 1px solid #2a5f8a;
+      box-shadow: 0 8px 16px rgba(0, 51, 102, 0.2);
+      transition: 0.2s;
+    }
+
+    .btn:hover {
+      background: linear-gradient(145deg, #002244, #0f3b60);
+      box-shadow: 0 10px 20px rgba(0, 51, 102, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 8px rgba(0, 51, 102, 0.2);
+    }
+
+    .footer {
+      background-color: #f0f5fc;
+      padding: 18px 28px;
+      border-top: 1px solid #d0dded;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #2f4858;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer .school {
+      font-weight: 600;
+      color: #003366;
+      letter-spacing: 0.3px;
+    }
+
+    .footer .qr-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 6px 14px;
+      border-radius: 40px;
+      border: 1px dashed #003366;
+    }
+
+    @media (max-width: 600px) {
+      .header h1 { font-size: 22px; }
+      h2 { font-size: 28px; }
+      .btn { padding: 14px 30px; font-size: 16px; }
+      .qq-qr { width: 150px; height: 150px; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h1>
+      石家庄铁道大学校史馆
+      <span>登记成功</span>
+    </h1>
+    <div class="header-sub">
+      <div>📍 河北省石家庄市 · 校本部</div>
+      <div>官方QQ：1679973478</div>
+    </div>
+  </div>
+
+  <div class="success-section">
+    <div class="success-icon">
+      <!-- 对号 SVG -->
+      <svg viewBox="0 0 24 24">
+        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+      </svg>
+    </div>
+    <h2>登记成功！</h2>
+    <div class="message">
+      欢迎参观石家庄铁道大学校史馆<br>
+      请遵守馆内规定，祝您参观愉快！
+    </div>
+
+    <!-- 校史宣讲团官方QQ卡片 -->
+    <div class="qq-card">
+      <h3>
+        校史宣讲团官方QQ
+        <span>扫码添加</span>
+      </h3>
+      <!-- 这里放官Q二维码图片，请替换 src 为实际图片路径 -->
+      <div class="qq-qr">
+        <img src="/images/qq_1679973478.png" alt="校史宣讲团QQ二维码" onerror="this.onerror=null; this.src='https://via.placeholder.com/180x180?text=QQ+QR';">
+      </div>
+      <div class="qq-number">1679973478</div>
+      <div style="color:#2f4858; font-size:14px;">获取最新校史活动资讯</div>
+    </div>
+
+    <div class="notice-reminder">
+      <p>📌 温馨提示</p>
+      <ul>
+        <li>请勿触摸展品</li>
+        <li>馆内禁止吸烟、饮食</li>
+        <li>如有疑问请联系工作人员</li>
+      </ul>
+    </div>
+
+    <a href="/" class="btn">← 返回登记首页</a>
+  </div>
+
+  <div class="footer">
+    <div class="school">🏫 石家庄铁道大学 · 校史馆</div>
+    <div class="qr-hint">
+      <span>📱 现场扫码登记</span>
+      <span style="color:#003366;">|</span>
+      <span>数据仅用于校史馆管理</span>
+    </div>
+  </div>
+</div>
+</body>
+</html>

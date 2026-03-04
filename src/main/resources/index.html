@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>石家庄铁道大学校史馆 · 访客登记</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', 'Segoe UI', Roboto, system-ui, sans-serif;
+      background-color: #f0f2f5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      background-image: linear-gradient(135deg, #eef2f6 0%, #d9e0e8 100%);
+    }
+
+    .card {
+      max-width: 800px;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 24px;
+      box-shadow: 0 20px 40px rgba(0, 34, 68, 0.15);
+      overflow: hidden;
+      border: 1px solid rgba(0, 68, 128, 0.1);
+    }
+
+    .header {
+      background: linear-gradient(145deg, #003366 0%, #1a4d80 100%);
+      padding: 30px 28px 20px 28px;
+      color: white;
+      border-bottom: 4px solid #ffcc00;
+    }
+
+    .header h1 {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .header h1 span {
+      background: #ffcc00;
+      color: #003366;
+      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-weight: 500;
+    }
+
+    .header-sub {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 15px;
+      opacity: 0.9;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .header-sub a {
+      color: #ffcc00;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .notice-section {
+      padding: 28px 28px 20px 28px;
+      border-bottom: 1px solid #e0e8f0;
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .notice-title h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #003366;
+      border-left: 5px solid #ffcc00;
+      padding-left: 15px;
+    }
+
+    .notice-content {
+      background-color: #f8fafd;
+      border-radius: 16px;
+      padding: 20px 24px;
+      border: 1px solid #d9e2ef;
+      max-height: 380px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: #b0c4de #eef3f9;
+    }
+
+    .notice-content::-webkit-scrollbar {
+      width: 6px;
+    }
+    .notice-content::-webkit-scrollbar-track {
+      background: #eef3f9;
+      border-radius: 10px;
+    }
+    .notice-content::-webkit-scrollbar-thumb {
+      background: #b0c4de;
+      border-radius: 10px;
+    }
+
+    .notice-content ol {
+      list-style-type: none;
+      counter-reset: item;
+    }
+
+    .notice-content li {
+      counter-increment: item;
+      margin-bottom: 14px;
+      font-size: 15px;
+      line-height: 1.6;
+      color: #1e2f3e;
+      display: flex;
+      gap: 12px;
+    }
+
+    .notice-content li::before {
+      content: counter(item);
+      background-color: #003366;
+      color: white;
+      font-weight: 600;
+      min-width: 24px;
+      height: 24px;
+      border-radius: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .notice-highlight {
+      background-color: #eef6ff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      margin-top: 16px;
+      font-size: 14px;
+      border-left: 3px solid #ffcc00;
+      color: #003355;
+    }
+
+    .agree-box {
+      padding: 20px 28px 10px 28px;
+    }
+
+    .agree-check {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #f2f6fc;
+      padding: 14px 20px;
+      border-radius: 60px;
+      border: 1px solid #cbd6e6;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .agree-check:hover {
+      background: #e9f0fa;
+      border-color: #003366;
+    }
+
+    .agree-check input {
+      width: 20px;
+      height: 20px;
+      accent-color: #003366;
+      cursor: pointer;
+    }
+
+    .agree-check label {
+      font-weight: 500;
+      color: #003366;
+      cursor: pointer;
+      flex: 1;
+      font-size: 16px;
+    }
+
+    .form-section {
+      padding: 0 28px 30px 28px;
+      transition: opacity 0.3s, max-height 0.4s ease-in-out;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      visibility: hidden;
+    }
+
+    .form-section.active {
+      max-height: 800px;
+      opacity: 1;
+      visibility: visible;
+      margin-top: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 15px;
+      color: #003366;
+      margin-bottom: 6px;
+    }
+
+    .form-group label .required {
+      color: #cc3300;
+      margin-left: 4px;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 14px 18px;
+      font-size: 16px;
+      border: 1.5px solid #d4deec;
+      border-radius: 14px;
+      background-color: #ffffff;
+      transition: 0.2s;
+      font-family: inherit;
+    }
+
+    .form-control:focus {
+      border-color: #003366;
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 18px;
+    }
+
+    .form-row .form-group {
+      flex: 1;
+    }
+
+    .btn-submit {
+      background: linear-gradient(145deg, #003366, #1e4d7a);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 28px;
+      font-size: 18px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 8px 16px rgba(0, 51, 102, 0.2);
+      border: 1px solid #2a5f8a;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-submit:hover {
+      background: linear-gradient(145deg, #002244, #0f3b60);
+      box-shadow: 0 10px 20px rgba(0, 51, 102, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .btn-submit:active {
+      transform: translateY(0);
+      box-shadow: 0 4px 8px rgba(0, 51, 102, 0.2);
+    }
+
+    .footer {
+      background-color: #f0f5fc;
+      padding: 18px 28px;
+      border-top: 1px solid #d0dded;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 14px;
+      color: #2f4858;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .footer .school {
+      font-weight: 600;
+      color: #003366;
+      letter-spacing: 0.3px;
+    }
+
+    .footer .qr-hint {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 6px 14px;
+      border-radius: 40px;
+      border: 1px dashed #003366;
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .header { padding: 20px; }
+      .header h1 { font-size: 22px; }
+      .form-row { flex-direction: column; gap: 0; }
+      .notice-content { max-height: 280px; padding: 15px; }
+      .footer { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+<div class="card">
+  <div class="header">
+    <h1>
+      石家庄铁道大学校史馆
+      <span>访客登记</span>
+    </h1>
+    <div class="header-sub">
+      <div>📍 河北省石家庄市 · 校本部</div>
+      <div>官方QQ：<a href="https://qm.qq.com/q/YOURCODE" target="_blank">1679973478</a></div>
+    </div>
+  </div>
+
+  <div class="notice-section">
+    <div class="notice-title">
+      <h2>📋 参观须知</h2>
+    </div>
+    <div class="notice-content">
+      <ol>
+        <li>本馆免费向广大师生及社会公众开放。</li>
+        <li>开馆时间：周一至周五 8:00-18:00（当日17:30停止入馆）；法定节假日闭馆，其他闭馆安排将另行通知。团体参观请提前登记预约，参观时间可另行商定（官方QQ号：1679973478）。</li>
+        <li>处于醉酒状态者、衣冠不整者，以及无监护人陪同的无民事行为能力人、限制民事行为能力人，谢绝入馆。</li>
+        <li>馆内严禁吸烟、饮食、攀爬、污损、刻画、喧哗、打闹、躺卧、乱扔废弃物、未经许可的乐器演奏与音响外放、长时间占用公共设施及公共空间等破坏参观环境、扰乱参观秩序的行为。</li>
+        <li>本馆实行24小时不间断视频监控，请文明参观，自觉爱护展览设施及展品。如有损坏，须照价赔偿，情节严重者将依法追究相关责任。</li>
+        <li>未经许可，展厅内禁止开展自媒体直播、录播活动，禁止使用闪光灯、自拍杆及其他各类拍摄支架进行拍摄。</li>
+        <li>未经许可，禁止在场馆内进行各类表演、宣传、采访、讲学、社会调查、宗教活动、商业性拍摄等非参观游览活动。</li>
+        <li>禁止在场馆内乞讨、卖艺、未经许可拉挂横幅，禁止散发、悬挂、粘贴广告等行为，禁止开展任何违背公序良俗的活动。</li>
+        <li>如遇各类突发事件、极端天气等特殊情况，请听从工作人员引导或广播提示，有序疏散。</li>
+        <li>如遇本馆举办的重大或临时性活动，须服从场馆统一安排。</li>
+        <li>最终解释权归石家庄铁道大学校史馆。</li>
+      </ol>
+      <div class="notice-highlight">
+        ⚠️ 入馆即视为已详细阅读并承诺遵守以上条款。感谢您的配合！
+      </div>
+    </div>
+  </div>
+
+  <div class="agree-box">
+    <div class="agree-check" onclick="toggleForm(event)">
+      <input type="checkbox" id="agreeCheck" onchange="handleAgreeChange(event)">
+      <label for="agreeCheck">我已仔细阅读并同意《参观须知》中的所有条款</label>
+    </div>
+  </div>
+
+  <!-- 注意：form 中添加了 action="/success.html" 并保留 netlify 属性 -->
+  <div class="form-section" id="registrationForm">
+    <form name="visitor-registration" method="POST" netlify action="/success.html">
+      <input type="hidden" name="form-name" value="visitor-registration">
+
+      <div class="form-group">
+        <label>姓名 <span class="required">*</span></label>
+        <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>手机号 <span class="required">*</span></label>
+          <input type="tel" name="手机号" class="form-control" required placeholder="11位手机号" pattern="[0-9]{11}">
+        </div>
+        <div class="form-group">
+          <label>同行人数</label>
+          <input type="number" name="同行人数" class="form-control" value="1" min="1">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>来访时间 <span class="required">*</span></label>
+        <input type="datetime-local" name="来访时间" class="form-control" required>
+      </div>
+
+      <div class="form-group">
+        <label>备注 (选填)</label>
+        <textarea name="备注" class="form-control" rows="3" placeholder="例如：团体参观、特殊需求等"></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">✍️ 提交登记信息</button>
+    </form>
+  </div>
+
+  <div class="footer">
+    <div class="school">🏫 石家庄铁道大学 · 校史馆</div>
+    <div class="qr-hint">
+      <span>📱 现场扫码登记</span>
+      <span style="color:#003366;">|</span>
+      <span>数据仅用于校史馆管理</span>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleForm(event) {
+    if (event.target.tagName === 'INPUT') return;
+    const cb = document.getElementById('agreeCheck');
+    cb.checked = !cb.checked;
+    const changeEvent = new Event('change', { bubbles: true });
+    cb.dispatchEvent(changeEvent);
+  }
+
+  function handleAgreeChange(e) {
+    const formSection = document.getElementById('registrationForm');
+    formSection.classList.toggle('active', e.target.checked);
+  }
+</script>
+</body>
+</html>
