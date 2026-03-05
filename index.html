@@ -206,7 +206,7 @@
     }
 
     .form-section.active {
-      max-height: 800px;
+      max-height: 900px;  /* 稍微调高以容纳新字段 */
       opacity: 1;
       visibility: visible;
       margin-top: 10px;
@@ -244,6 +244,14 @@
       border-color: #003366;
       outline: none;
       box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+    }
+
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23003366' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      background-size: 16px;
     }
 
     .form-row {
@@ -365,14 +373,28 @@
     </div>
   </div>
 
-  <!-- 注意：这里移除了 action 属性，netlify 属性保留 -->
+  <!-- 登记表单（添加了身份下拉框） -->
   <div class="form-section" id="registrationForm">
     <form name="visitor-registration" method="POST" netlify>
       <input type="hidden" name="form-name" value="visitor-registration">
+      <!-- 成功重定向隐藏字段（如果需要跳转到成功页） -->
+      <input type="hidden" name="success-redirect" value="/success.html">
 
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
         <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
+      </div>
+
+      <!-- 新增：身份下拉框 -->
+      <div class="form-group">
+        <label>身份 <span class="required">*</span></label>
+        <select name="身份" class="form-control" required>
+          <option value="" disabled selected>请选择您的身份</option>
+          <option value="学生">学生</option>
+          <option value="老师">老师</option>
+          <option value="校友">校友</option>
+          <option value="其他">其他</option>
+        </select>
       </div>
 
       <div class="form-row">
@@ -424,41 +446,6 @@
     const formSection = document.getElementById('registrationForm');
     formSection.classList.toggle('active', e.target.checked);
   }
-
-  // ========== 新增：表单提交拦截 + 手动跳转 ==========
-  document.addEventListener('DOMContentLoaded', function() {
-    const form = document.querySelector('form');
-    if (!form) return;
-
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault(); // 阻止原生提交（防止Netlify默认的AJAX）
-
-      // 收集表单数据
-      const formData = new FormData(form);
-      const urlEncoded = new URLSearchParams(formData).toString();
-
-      try {
-        const response = await fetch('/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-          },
-          body: urlEncoded
-        });
-
-        if (response.ok) {
-          // 提交成功，跳转到成功页面
-          window.location.href = '/success.html';
-        } else {
-          alert('提交失败（状态码：' + response.status + '），请稍后重试或联系工作人员。');
-        }
-      } catch (error) {
-        alert('网络错误，请检查您的网络连接后重试。');
-        console.error('提交出错：', error);
-      }
-    });
-  });
-  // ========== 结束 ==========
 </script>
 </body>
 </html>
