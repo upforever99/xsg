@@ -206,7 +206,7 @@
     }
 
     .form-section.active {
-      max-height: 900px;  /* 稍微调高以容纳新字段 */
+      max-height: 1000px;  /* 增加高度以容纳自定义身份输入框 */
       opacity: 1;
       visibility: visible;
       margin-top: 10px;
@@ -252,6 +252,12 @@
       background-repeat: no-repeat;
       background-position: right 18px center;
       background-size: 16px;
+    }
+
+    /* 自定义身份输入框，初始隐藏 */
+    .custom-identity-group {
+      margin-top: 10px;
+      display: none;
     }
 
     .form-row {
@@ -373,11 +379,11 @@
     </div>
   </div>
 
-  <!-- 登记表单（添加了身份下拉框） -->
+  <!-- 登记表单（包含动态自定义身份输入框） -->
   <div class="form-section" id="registrationForm">
     <form name="visitor-registration" method="POST" netlify>
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- 成功重定向隐藏字段（如果需要跳转到成功页） -->
+      <!-- 成功重定向隐藏字段 -->
       <input type="hidden" name="success-redirect" value="/success.html">
 
       <div class="form-group">
@@ -385,16 +391,22 @@
         <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
       </div>
 
-      <!-- 新增：身份下拉框 -->
+      <!-- 身份下拉框 -->
       <div class="form-group">
         <label>身份 <span class="required">*</span></label>
-        <select name="身份" class="form-control" required>
+        <select name="身份" id="identitySelect" class="form-control" required>
           <option value="" disabled selected>请选择您的身份</option>
           <option value="学生">学生</option>
           <option value="老师">老师</option>
           <option value="校友">校友</option>
           <option value="其他">其他</option>
         </select>
+      </div>
+
+      <!-- 自定义身份输入框（初始隐藏） -->
+      <div class="form-group custom-identity-group" id="customIdentityGroup">
+        <label>请输入具体身份 <span class="required">*</span></label>
+        <input type="text" name="自定义身份" id="customIdentity" class="form-control" placeholder="例如：教职工家属、社会人士等">
       </div>
 
       <div class="form-row">
@@ -446,6 +458,26 @@
     const formSection = document.getElementById('registrationForm');
     formSection.classList.toggle('active', e.target.checked);
   }
+
+  // 身份选择联动：当选择“其他”时显示自定义输入框，否则隐藏
+  document.addEventListener('DOMContentLoaded', function() {
+    const identitySelect = document.getElementById('identitySelect');
+    const customGroup = document.getElementById('customIdentityGroup');
+    const customInput = document.getElementById('customIdentity');
+
+    if (identitySelect && customGroup && customInput) {
+      identitySelect.addEventListener('change', function() {
+        if (this.value === '其他') {
+          customGroup.style.display = 'block';
+          customInput.setAttribute('required', 'required'); // 设置为必填
+        } else {
+          customGroup.style.display = 'none';
+          customInput.removeAttribute('required'); // 移除必填
+          customInput.value = ''; // 清空之前输入
+        }
+      });
+    }
+  });
 </script>
 </body>
 </html>
