@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>石家庄铁道大学校史馆 · 访客登记</title>
   <style>
-    /* 样式与之前保持一致，确保视觉体验 */
+    /* 样式与您之前成功的版本保持一致，确保视觉体验 */
     * {
       margin: 0;
       padding: 0;
@@ -381,10 +381,10 @@
 
   <!-- 登记表单 -->
   <div class="form-section" id="registrationForm">
-    <!-- 关键：name 属性、netlify 标志、隐藏字段 -->
+    <!-- 关键：表单必须包含 netlify 属性，name 与 form-name 一致，并包含 redirect 字段 -->
     <form name="visitor-registration" method="POST" netlify onsubmit="return validateAgreeBeforeSubmit()">
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- ✅ 重定向字段，使用相对路径 -->
+      <!-- ✅ 重定向字段，使用相对路径（确保 success.html 位于根目录） -->
       <input type="hidden" name="redirect" value="/success.html">
 
       <div class="form-group">
