@@ -385,8 +385,7 @@
     <form name="visitor-registration" method="POST" netlify onsubmit="return validateAgreeBeforeSubmit()">
       <input type="hidden" name="form-name" value="visitor-registration">
       <!-- ✅ 关键修改：使用 redirect 字段，值为目标路径（如 /success.html） -->
-      <input type="hidden" name="redirect" value="https://xsgstdu.netlify.app/success.html">
-
+      <input type="hidden" name="redirect" value="/success.html">
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
         <input type="text" name="姓名" class="form-control" required placeholder="">
