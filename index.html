@@ -365,12 +365,10 @@
     </div>
   </div>
 
-  <!-- 表单：移除了 action，添加了 success-redirect 隐藏字段 -->
+  <!-- 表单添加了 action="/success.html" 实现原生跳转 -->
   <div class="form-section" id="registrationForm">
-    <form name="visitor-registration" method="POST" netlify>
+    <form name="visitor-registration" method="POST" netlify action="/success.html">
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- 关键：添加成功重定向字段 -->
-      <input type="hidden" name="success-redirect" value="/success.html">
 
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
@@ -413,7 +411,7 @@
 </div>
 
 <script>
-  // 复选框控制表单显示
+  // 复选框控制表单显示（已保留）
   function toggleForm(event) {
     if (event.target.tagName === 'INPUT') return;
     const cb = document.getElementById('agreeCheck');
@@ -426,6 +424,8 @@
     const formSection = document.getElementById('registrationForm');
     formSection.classList.toggle('active', e.target.checked);
   }
+
+  // 注意：已移除所有手动跳转的 JavaScript 代码，现在完全依赖 Netlify 原生跳转
 </script>
 </body>
 </html>
