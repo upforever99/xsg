@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>石家庄铁道大学校史馆 · 访客登记</title>
   <style>
-    /* 样式完整保留（与之前一致，确保视觉体验） */
+    /* 样式与之前保持一致，确保视觉体验 */
     * {
       margin: 0;
       padding: 0;
@@ -379,16 +379,17 @@
     </div>
   </div>
 
-  <!-- 登记表单（包含动态自定义身份输入框） -->
+  <!-- 登记表单 -->
   <div class="form-section" id="registrationForm">
-    <!-- 注意：隐藏字段 name 已改为 "redirect" 以实现 Netlify 自定义跳转 -->
+    <!-- 关键：name 属性、netlify 标志、隐藏字段 -->
     <form name="visitor-registration" method="POST" netlify onsubmit="return validateAgreeBeforeSubmit()">
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- ✅ 关键修改：使用 redirect 字段，值为目标路径（如 /success.html） -->
+      <!-- ✅ 重定向字段，使用相对路径 -->
       <input type="hidden" name="redirect" value="/success.html">
+
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
-        <input type="text" name="姓名" class="form-control" required placeholder="">
+        <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
       </div>
 
       <div class="form-group">
