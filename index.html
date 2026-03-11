@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>石家庄铁道大学校史馆 · 访客登记</title>
   <style>
-    /* 样式与您之前成功的版本保持一致，确保视觉体验 */
     * {
       margin: 0;
       padding: 0;
@@ -207,7 +206,7 @@
     }
 
     .form-section.active {
-      max-height: 1000px;
+      max-height: 800px;
       opacity: 1;
       visibility: visible;
       margin-top: 10px;
@@ -245,19 +244,6 @@
       border-color: #003366;
       outline: none;
       box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
-    }
-
-    select.form-control {
-      appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23003366' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 18px center;
-      background-size: 16px;
-    }
-
-    .custom-identity-group {
-      margin-top: 10px;
-      display: none;
     }
 
     .form-row {
@@ -373,40 +359,22 @@
   </div>
 
   <div class="agree-box">
-    <div class="agree-check" id="agreeCheckWrapper">
-      <input type="checkbox" id="agreeCheck">
+    <div class="agree-check" onclick="toggleForm(event)">
+      <input type="checkbox" id="agreeCheck" onchange="handleAgreeChange(event)">
       <label for="agreeCheck">我已仔细阅读并同意《参观须知》中的所有条款</label>
     </div>
   </div>
 
-  <!-- 登记表单 -->
+  <!-- 表单：移除了 action，添加了 success-redirect 隐藏字段 -->
   <div class="form-section" id="registrationForm">
-    <!-- 关键：表单必须包含 netlify 属性，name 与 form-name 一致，并包含 redirect 字段 -->
-    <form name="visitor-registration" method="POST" netlify onsubmit="return validateAgreeBeforeSubmit()">
+    <form name="visitor-registration" method="POST" netlify>
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- ✅ 重定向字段，使用相对路径（确保 success.html 位于根目录） -->
-      <input type="hidden" name="redirect" value="/success.html">
+      <!-- 关键：添加成功重定向字段 -->
+      <input type="hidden" name="success-redirect" value="/success.html">
 
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
         <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
-      </div>
-
-      <div class="form-group">
-        <label>身份 <span class="required">*</span></label>
-        <select name="身份" id="identitySelect" class="form-control" required>
-          <option value="" disabled selected>请选择您的身份</option>
-          <option value="学生">学生</option>
-          <option value="老师">老师</option>
-          <option value="校友">校友</option>
-          <option value="其他">其他</option>
-        </select>
-      </div>
-
-      <!-- 自定义身份输入框（初始隐藏） -->
-      <div class="form-group custom-identity-group" id="customIdentityGroup">
-        <label>请输入具体身份 <span class="required">*</span></label>
-        <input type="text" name="自定义身份" id="customIdentity" class="form-control" placeholder="例如：教职工家属、社会人士等">
       </div>
 
       <div class="form-row">
@@ -416,7 +384,7 @@
         </div>
         <div class="form-group">
           <label>同行人数</label>
-          <input type="number" name="同行人数" class="form-control" value="1" min="0" step="1">
+          <input type="number" name="同行人数" class="form-control" value="1" min="1">
         </div>
       </div>
 
@@ -445,60 +413,19 @@
 </div>
 
 <script>
-  (function() {
-    // 复选框控制表单显示
-    const agreeCheck = document.getElementById('agreeCheck');
+  // 复选框控制表单显示
+  function toggleForm(event) {
+    if (event.target.tagName === 'INPUT') return;
+    const cb = document.getElementById('agreeCheck');
+    cb.checked = !cb.checked;
+    const changeEvent = new Event('change', { bubbles: true });
+    cb.dispatchEvent(changeEvent);
+  }
+
+  function handleAgreeChange(e) {
     const formSection = document.getElementById('registrationForm');
-    const wrapper = document.getElementById('agreeCheckWrapper');
-
-    function toggleFormVisibility(checked) {
-      if (checked) {
-        formSection.classList.add('active');
-      } else {
-        formSection.classList.remove('active');
-      }
-    }
-
-    agreeCheck.addEventListener('change', function(e) {
-      toggleFormVisibility(e.target.checked);
-    });
-
-    wrapper.addEventListener('click', function(e) {
-      if (e.target.closest('input, label')) return;
-      agreeCheck.checked = !agreeCheck.checked;
-      agreeCheck.dispatchEvent(new Event('change', { bubbles: true }));
-    });
-
-    toggleFormVisibility(agreeCheck.checked);
-
-    // 身份选择联动
-    const identitySelect = document.getElementById('identitySelect');
-    const customGroup = document.getElementById('customIdentityGroup');
-    const customInput = document.getElementById('customIdentity');
-
-    if (identitySelect && customGroup && customInput) {
-      identitySelect.addEventListener('change', function() {
-        if (this.value === '其他') {
-          customGroup.style.display = 'block';
-          customInput.setAttribute('required', 'required');
-        } else {
-          customGroup.style.display = 'none';
-          customInput.removeAttribute('required');
-          customInput.value = '';
-        }
-      });
-    }
-
-    // 提交前二次验证
-    window.validateAgreeBeforeSubmit = function() {
-      if (!agreeCheck.checked) {
-        alert('请您仔细阅读并同意《参观须知》后再提交登记信息。');
-        return false;
-      }
-      return true;
-    };
-  })();
+    formSection.classList.toggle('active', e.target.checked);
+  }
 </script>
-
 </body>
 </html>
