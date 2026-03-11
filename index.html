@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>石家庄铁道大学校史馆 · 访客登记</title>
   <style>
+    /* 样式与您成功的版本保持一致，仅微调适应新元素 */
     * {
       margin: 0;
       padding: 0;
@@ -206,7 +207,7 @@
     }
 
     .form-section.active {
-      max-height: 800px;
+      max-height: 900px;  /* 略微增加以容纳新字段 */
       opacity: 1;
       visibility: visible;
       margin-top: 10px;
@@ -244,6 +245,21 @@
       border-color: #003366;
       outline: none;
       box-shadow: 0 0 0 3px rgba(0, 51, 102, 0.15);
+    }
+
+    /* 下拉框样式 */
+    select.form-control {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23003366' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 18px center;
+      background-size: 16px;
+    }
+
+    /* 自定义身份输入框初始隐藏 */
+    .custom-identity-group {
+      display: none;
+      margin-top: 10px;
     }
 
     .form-row {
@@ -365,16 +381,36 @@
     </div>
   </div>
 
-  <!-- 表单添加了 action="/success.html" 实现原生跳转 -->
+  <!-- 表单保持 action="/success.html" 以确保提交后跳转，同时保留 netlify 属性 -->
   <div class="form-section" id="registrationForm">
     <form name="visitor-registration" method="POST" netlify action="/success.html">
       <input type="hidden" name="form-name" value="visitor-registration">
 
+      <!-- 姓名 -->
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
         <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
       </div>
 
+      <!-- 身份下拉框（新增） -->
+      <div class="form-group">
+        <label>身份 <span class="required">*</span></label>
+        <select name="身份" id="identitySelect" class="form-control" required>
+          <option value="" disabled selected>请选择您的身份</option>
+          <option value="学生">学生</option>
+          <option value="老师">老师</option>
+          <option value="校友">校友</option>
+          <option value="其他">其他</option>
+        </select>
+      </div>
+
+      <!-- 自定义身份输入框（初始隐藏，仅当选择“其他”时显示） -->
+      <div class="form-group custom-identity-group" id="customIdentityGroup">
+        <label>请输入具体身份 <span class="required">*</span></label>
+        <input type="text" name="自定义身份" id="customIdentity" class="form-control" placeholder="例如：教职工家属、社会人士等">
+      </div>
+
+      <!-- 手机号 + 同行人数（保持原样） -->
       <div class="form-row">
         <div class="form-group">
           <label>手机号 <span class="required">*</span></label>
@@ -386,11 +422,13 @@
         </div>
       </div>
 
+      <!-- 来访时间 -->
       <div class="form-group">
         <label>来访时间 <span class="required">*</span></label>
         <input type="datetime-local" name="来访时间" class="form-control" required>
       </div>
 
+      <!-- 备注 -->
       <div class="form-group">
         <label>备注 (选填)</label>
         <textarea name="备注" class="form-control" rows="3" placeholder="例如：团体参观、特殊需求等"></textarea>
@@ -411,7 +449,7 @@
 </div>
 
 <script>
-  // 复选框控制表单显示（已保留）
+  // 复选框控制表单显示（您的原逻辑，已保留）
   function toggleForm(event) {
     if (event.target.tagName === 'INPUT') return;
     const cb = document.getElementById('agreeCheck');
@@ -425,7 +463,25 @@
     formSection.classList.toggle('active', e.target.checked);
   }
 
-  // 注意：已移除所有手动跳转的 JavaScript 代码，现在完全依赖 Netlify 原生跳转
+  // 身份选择联动（新增）
+  (function() {
+    const identitySelect = document.getElementById('identitySelect');
+    const customGroup = document.getElementById('customIdentityGroup');
+    const customInput = document.getElementById('customIdentity');
+
+    if (identitySelect && customGroup && customInput) {
+      identitySelect.addEventListener('change', function() {
+        if (this.value === '其他') {
+          customGroup.style.display = 'block';
+          customInput.setAttribute('required', 'required');
+        } else {
+          customGroup.style.display = 'none';
+          customInput.removeAttribute('required');
+          customInput.value = ''; // 清空之前输入
+        }
+      });
+    }
+  })();
 </script>
 </body>
 </html>
