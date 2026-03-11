@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>石家庄铁道大学校史馆 · 访客登记</title>
   <style>
+    /* 样式完整保留（与之前一致，确保视觉体验） */
     * {
       margin: 0;
       padding: 0;
@@ -206,7 +207,7 @@
     }
 
     .form-section.active {
-      max-height: 1000px;  /* 足够容纳所有表单项 */
+      max-height: 1000px;
       opacity: 1;
       visibility: visible;
       margin-top: 10px;
@@ -254,7 +255,6 @@
       background-size: 16px;
     }
 
-    /* 自定义身份输入框，初始隐藏 */
     .custom-identity-group {
       margin-top: 10px;
       display: none;
@@ -373,7 +373,6 @@
   </div>
 
   <div class="agree-box">
-    <!-- 移除内联onclick，改用js监听更稳健的点击事件（在js中实现） -->
     <div class="agree-check" id="agreeCheckWrapper">
       <input type="checkbox" id="agreeCheck">
       <label for="agreeCheck">我已仔细阅读并同意《参观须知》中的所有条款</label>
@@ -382,18 +381,17 @@
 
   <!-- 登记表单（包含动态自定义身份输入框） -->
   <div class="form-section" id="registrationForm">
-    <!-- 增加 onsubmit 前端保护：未勾选同意无法提交（即使表单被手动显示） -->
+    <!-- 注意：隐藏字段 name 已改为 "redirect" 以实现 Netlify 自定义跳转 -->
     <form name="visitor-registration" method="POST" netlify onsubmit="return validateAgreeBeforeSubmit()">
       <input type="hidden" name="form-name" value="visitor-registration">
-      <!-- 成功重定向隐藏字段 - Netlify 原生支持，提交后跳转到 success.html -->
-      <input type="hidden" name="success-redirect" value="/success.html">
+      <!-- ✅ 关键修改：使用 redirect 字段，值为目标路径（如 /success.html） -->
+      <input type="hidden" name="redirect" value="/success.html">
 
       <div class="form-group">
         <label>姓名 <span class="required">*</span></label>
         <input type="text" name="姓名" class="form-control" required placeholder="例如：张中华">
       </div>
 
-      <!-- 身份下拉框 -->
       <div class="form-group">
         <label>身份 <span class="required">*</span></label>
         <select name="身份" id="identitySelect" class="form-control" required>
@@ -448,12 +446,11 @@
 
 <script>
   (function() {
-    // ---------- 1. 复选框控制表单显示/隐藏 (且处理整块点击防冲突) ----------
+    // 复选框控制表单显示
     const agreeCheck = document.getElementById('agreeCheck');
     const formSection = document.getElementById('registrationForm');
     const wrapper = document.getElementById('agreeCheckWrapper');
 
-    // 切换表单可见性
     function toggleFormVisibility(checked) {
       if (checked) {
         formSection.classList.add('active');
@@ -462,27 +459,19 @@
       }
     }
 
-    // 监听复选框change事件
     agreeCheck.addEventListener('change', function(e) {
       toggleFormVisibility(e.target.checked);
     });
 
-    // 处理wrapper整块点击 (但避免与input和label的默认行为冲突)
     wrapper.addEventListener('click', function(e) {
-      // 如果点击的元素是 input 或 label，或者它们内部（通过closest判断），让浏览器默认处理，我们不干预
-      if (e.target.closest('input, label')) {
-        return;  // 浏览器默认会切换checkbox状态，并触发change事件，我们已经在change中处理UI
-      }
-      // 点击的是空白区域（例如div的内边距区域），手动切换复选框
+      if (e.target.closest('input, label')) return;
       agreeCheck.checked = !agreeCheck.checked;
-      // 手动触发change事件，保证UI联动
       agreeCheck.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
-    // 初始化：确保一开始表单隐藏 (如果复选框未勾选，但可能由于浏览器缓存？强制同步)
     toggleFormVisibility(agreeCheck.checked);
 
-    // ---------- 2. 身份选择联动 ----------
+    // 身份选择联动
     const identitySelect = document.getElementById('identitySelect');
     const customGroup = document.getElementById('customIdentityGroup');
     const customInput = document.getElementById('customIdentity');
@@ -491,35 +480,25 @@
       identitySelect.addEventListener('change', function() {
         if (this.value === '其他') {
           customGroup.style.display = 'block';
-          customInput.setAttribute('required', 'required'); // 设置为必填
+          customInput.setAttribute('required', 'required');
         } else {
           customGroup.style.display = 'none';
-          customInput.removeAttribute('required'); // 移除必填
-          customInput.value = ''; // 清空之前输入
+          customInput.removeAttribute('required');
+          customInput.value = '';
         }
       });
     }
 
-    // ---------- 3. 提交前二次验证：必须勾选同意 ----------
+    // 提交前二次验证
     window.validateAgreeBeforeSubmit = function() {
       if (!agreeCheck.checked) {
         alert('请您仔细阅读并同意《参观须知》后再提交登记信息。');
         return false;
       }
-      return true;  // 让浏览器继续执行默认的required验证等
+      return true;
     };
-
-    // 额外优化：若同行人数填写负数，浏览器会处理因为min="0"，但保险加上
-    // 还可以在提交时确保自定义身份若显示则必填 (已经通过required属性，浏览器会自动拦截)
-    // 但注意：如果用户通过开发者工具将customGroup display强制显示但未选“其他”，
-    // customInput没有required，不会强制。这符合逻辑：只有选“其他”才需要填具体身份。
   })();
 </script>
 
-<!-- 注意：本页面适配 Netlify 表单，提交后自动跳转 /success.html （需确保站点根目录存在 success.html） -->
 </body>
 </html>
-
-
-
-
